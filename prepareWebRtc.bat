@@ -367,6 +367,10 @@ IF !errorlevel! NEQ 0 CALL:error 1 "Could not generate WebRTC projects for %1 pl
 
 %powershell_path% -ExecutionPolicy ByPass -File ..\..\..\bin\RecurseReplaceInFiles.ps1 !outputPath! *.vcxproj "call ninja.exe" "call %DepotToolsPath%\ninja.exe"
 
+:: Replace paths from Win SDK 10.0.16299.0 to 10.0.14393.0
+%powershell_path% -ExecutionPolicy ByPass -File ..\..\..\bin\RecurseReplaceInFiles.ps1 !outputPath! environment.* "10.0.16299.0" "10.0.14393.0"
+
+
 IF EXIST ..\..\..\%webRtcLibsTemplatePath%\WebRtc.%~2.sln CALL:copyTemplates ..\..\..\%webRtcLibsTemplatePath%\WebRtc.%~2.sln !outputPath!\WebRtc.sln
 GOTO:EOF
 
