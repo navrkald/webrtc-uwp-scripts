@@ -146,20 +146,20 @@ IF NOT "!webRtcLibs!"=="" %msVS_Path%\VC\Bin\lib.exe /OUT:%destinationPath%webrt
 IF ERRORLEVEL 1 CALL:error 1 "Failed combining libs"
 
 IF EXIST *.dll (
-	CALL:print %debug% "Moving dlls from %libsSourcePath% to %destinationPath%"
+	CALL:print %debug% "Coping dlls from %libsSourcePath% to %destinationPath%"
 	FOR /f %%A IN ('forfiles -p %libsSourcePath% /s /m *.dll /c "CMD /c ECHO @relpath"') DO ( COPY %%~A %destinationPath% >NUL )
 )
 
-CALL:print %debug% "Moving pdbs from %libsSourcePath% to %destinationPath%"
+CALL:print %debug% "Coping pdbs from %libsSourcePath% to %destinationPath%"
 
-FOR /f %%A IN ('forfiles -p %libsSourcePath% /s /m *.pdb /c "CMD /c ECHO @relpath"') DO ( SET temp=%%~A && IF "!temp!"=="!temp:protobuf_full_do_not_use=!" MOVE %%~A %destinationPath% >NUL )
-IF EXIST %libsSourcePath%\..\..\boringssl.dll.pdb  MOVE ..\..\boringssl.dll.pdb %destinationPath% 
-IF EXIST %libsSourcePath%\..\..\protobuf_lite.dll.pdb  MOVE ..\..\protobuf_lite.dll.pdb %destinationPath% 
+FOR /f %%A IN ('forfiles -p %libsSourcePath% /s /m *.pdb /c "CMD /c ECHO @relpath"') DO ( SET temp=%%~A && IF "!temp!"=="!temp:protobuf_full_do_not_use=!" COPY %%~A %destinationPath% >NUL )
+IF EXIST %libsSourcePath%\..\..\boringssl.dll.pdb  COPY ..\..\boringssl.dll.pdb %destinationPath% 
+IF EXIST %libsSourcePath%\..\..\protobuf_lite.dll.pdb  COPY ..\..\protobuf_lite.dll.pdb %destinationPath% 
 
 IF EXIST %libsSourcePath%\..\..\boringssl.dll COPY ..\..\boringssl.dll %destinationPath% 
 IF EXIST %libsSourcePath%\..\..\protobuf_lite.dll COPY ..\..\protobuf_lite.dll %destinationPath% 
 
-IF ERRORLEVEL 1 CALL:error 0 "Failed moving pdb files"
+IF ERRORLEVEL 1 CALL:error 0 "Failed coping pdb files"
 POPD
 GOTO:EOF
 
@@ -177,9 +177,9 @@ IF NOT EXIST %libsSourceBackupPath%NUL (
 )
 
 
-CALL:print %debug% "Moving %libsSourcePath% to %libsSourceBackupPath%"
-MOVE %libsSourcePath% %libsSourceBackupPath%
-if ERRORLEVEL 1 CALL:error 0 "Failed moving %libsSourcePath% to %libsSourceBackupPath%"
+CALL:print %debug% "Coping %libsSourcePath% to %libsSourceBackupPath%"
+COPY %libsSourcePath% %libsSourceBackupPath%
+if ERRORLEVEL 1 CALL:error 0 "Failed coping %libsSourcePath% to %libsSourceBackupPath%"
 
 GOTO:EOF
 
