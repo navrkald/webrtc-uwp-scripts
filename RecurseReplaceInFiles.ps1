@@ -14,5 +14,6 @@ foreach ($file in $configFiles)
 {
     (Get-Content $file.PSPath) |
     Foreach-Object { $_ -replace $searchFor, $replaceWith } |
-    Set-Content $file.PSPath
+    # -NoNewline is from powershell 5 and is needed to replace sdk version in environment.* files in out dir to be than correctly parsed by tool_wrapper.py
+    Set-Content -NoNewline $file.PSPath
 }
